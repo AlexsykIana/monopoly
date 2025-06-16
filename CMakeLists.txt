@@ -26,10 +26,26 @@ find_package(SFML 2.6.2 COMPONENTS system window graphics REQUIRED)
 # Source files
 set(SOURCES
         src/main.cpp
+        src/Button.cpp
+        src/Street.cpp
+        src/Player.cpp
 )
 
 # Header files
 set(HEADERS
+        include/Button.h
+        include/Street.h
+        include/Player.h
+        include/StreetInitializer.h
+        src/StreetInitializer.cpp
+        include/Card.h
+        src/Card.cpp
+        include/Deck.h
+        src/Deck.cpp
+        include/BoardTile.h
+        src/BoardTile.cpp
+        include/GameBoard.h
+        src/GameBoard.cpp
 )
 
 # Create executable
@@ -38,6 +54,7 @@ add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 # Add include directories (equivalent to -I flag)
 target_include_directories(${PROJECT_NAME} PRIVATE
         ${SFML_INCLUDE_DIR}
+        ${CMAKE_SOURCE_DIR}/include
 )
 
 # Link SFML libraries
