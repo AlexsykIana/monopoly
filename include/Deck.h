@@ -4,9 +4,6 @@
 
 #include "Card.h" // Потрібен Card
 #include <vector>
-#include <string> // Для типу колоди
-#include <random> // Для перетасування
-#include <algorithm> // Для std::shuffle
 
 class Deck {
 public:
@@ -16,29 +13,24 @@ public:
     };
 
 private:
-    std::vector<Card> cards;          // Картки, що зараз у колоді
-    std::vector<Card> discardPile;    // Використані картки
-    DeckType type;                    // Тип колоди (Шанс або Громадська казна)
+    std::vector<Card> cards;
+    std::vector<Card> discardPile;
+    DeckType type;
 
-    void initializeChanceDeck();      // Приватний метод для створення карток "Шанс"
-    void initializeCommunityChestDeck(); // Приватний метод для створення карток "Громадська казна"
+    void initializeChanceDeck();
+    void initializeCommunityChestDeck();
 
 public:
-    // Конструктор
-    explicit Deck(DeckType deckType); // explicit, щоб уникнути неявних перетворень
+    explicit Deck(DeckType deckType);
 
-    // Перетасувати основну колоду карток
     void shuffle();
 
-    // Витягнути картку. Повертає картку.
-    // Якщо картка "Вийти з в'язниці", вона не йде в discardPile відразу.
-    Card drawCard(Player& player); // Передаємо гравця, якщо картка "Вийти з в'язниці" має бути йому віддана
+    Card drawCard(const Player& player);
 
-    // Повернути картку "Вийти з в'язниці" в колоду (зазвичай у discardPile)
     void returnGetOutOfJailCard(const Card& card);
 
-    // Чи порожня основна колода
     [[nodiscard]] bool isEmpty() const;
+    [[nodiscard]] bool discardPileIsEmpty() const;
 };
 
 #endif //DECK_H

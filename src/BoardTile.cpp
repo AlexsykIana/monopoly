@@ -1,11 +1,10 @@
 #include "BoardTile.h"
 #include "Player.h"
-#include "GameBoard.h"
 #include <iostream>
+#include <utility>
 
-// Реалізація конструктора
-BoardTile::BoardTile(const std::string& tileName, TileType tileType, sf::Vector2f visualPos)
-    : name(tileName),
+BoardTile::BoardTile(std::string tileName, TileType tileType, sf::Vector2f visualPos)
+    : name(std::move(tileName)),
       type(tileType),
       visualPosition(visualPos) {}
 

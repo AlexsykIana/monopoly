@@ -33,7 +33,7 @@ protected:
     sf::Vector2f visualPosition;
 
 public:
-    BoardTile(const std::string& tileName, TileType tileType, sf::Vector2f visualPos);
+    BoardTile(std::string tileName, TileType tileType, sf::Vector2f visualPos);
 
     // Віртуальний деструктор: важливий для правильного видалення об'єктів похідних класів
     // через вказівник на базовий клас.

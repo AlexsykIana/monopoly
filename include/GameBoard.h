@@ -3,30 +3,45 @@
 #define GAME_BOARD_H
 
 #include <vector>
-#include <SFML/Graphics.hpp>
 #include <memory>
 #include "BoardTile.h"
+#include "Deck.h"
+
+class Player;
+class GameBoard;
 
 class GameBoard {
 private:
     std::vector<std::unique_ptr<BoardTile>> tiles;
 
-    const int TOTAL_SQUARES = 40;
+    Deck chanceDeck;
+    Deck communityChestDeck;
+
+    int jailPositionIndex;
+    const int goPositionIndex;
+
+    static constexpr int TOTAL_SQUARES = 40;
 
     void initializeAllTiles();
 
 public:
-
     GameBoard();
 
-    [[nodiscard]] sf::Vector2f getVisualPositionForTile(int tileIndex) const;
-    [[nodiscard]] const BoardTile* getTile(int tileIndex) const;
-    [[nodiscard]] int getTotalSquares() const;
+    ~GameBoard() = default;
 
-    // У майбутньому сюди можна буде додавати методи для:
-    // - отримання типу клітинки за індексом
-    // - обробки дії при потраплянні на клітинку (playerLandedOnSquare)
-    // - роботи з колодами карток тощо.
+    [[nodiscard]] BoardTile* getTileAt(int tileIndex);
+    [[nodiscard]] const BoardTile* getTileAt(int tileIndex) const;
+    [[nodiscard]] sf::Vector2f getVisualPositionForTile(int tileIndex) const;
+    [[nodiscard]] static int getTotalSquares();
+    [[nodiscard]] int getJailPosition() const;
+    [[nodiscard]] int getGoPosition() const;
+
+    void playerLandedOnSquare(Player& player, int squareIndex, std::vector<Player*>& allPlayers);
+    void drawAndApplyChanceCard(Player& currentPlayer, std::vector<Player*>& allPlayers);
+    void drawAndApplyCommunityChestCard(Player& currentPlayer, std::vector<Player*>& allPlayers);
+
+    int movePlayer(Player &player, int steps, bool &passedGo);
+    void movePlayerToSquare(Player& player, int targetSquareIndex, bool collectGoSalaryIfPassed);
 };
 
 #endif //GAME_BOARD_H

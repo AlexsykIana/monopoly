@@ -29,6 +29,20 @@ set(SOURCES
         src/Button.cpp
         src/Street.cpp
         src/Player.cpp
+        src/StreetInitializer.cpp
+        src/Card.cpp
+        src/Deck.cpp
+        src/BoardTile.cpp
+        src/GameBoard.cpp
+        src/StreetTile.cpp
+        src/GoTile.cpp
+        src/ChanceTile.cpp
+        src/CommunityChestTile.cpp
+        src/TaxTile.cpp
+        src/JailOrJustVisitingTile.cpp
+        src/GoToJailTile.cpp
+        src/FreeParkingTile.cpp
+        src/Game.cpp
 )
 
 # Header files
@@ -37,15 +51,19 @@ set(HEADERS
         include/Street.h
         include/Player.h
         include/StreetInitializer.h
-        src/StreetInitializer.cpp
         include/Card.h
-        src/Card.cpp
         include/Deck.h
-        src/Deck.cpp
         include/BoardTile.h
-        src/BoardTile.cpp
         include/GameBoard.h
-        src/GameBoard.cpp
+        include/StreetTile.h
+        include/GoTile.h
+        include/ChanceTile.h
+        include/CommunityChestTile.h
+        include/TaxTile.h
+        include/JailOrJustVisitingTile.h
+        include/GoToJailTile.h
+        include/FreeParkingTile.h
+        include/Game.h
 )
 
 # Create executable

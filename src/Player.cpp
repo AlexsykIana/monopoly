@@ -1,12 +1,16 @@
 #include "Player.h"
+#include "Game.h"
+#include <iostream>
+#include <utility>
 
-Player::Player(const std::string& playerName, int startMoney, sf::Color tokenColor)
-        : name(playerName),
+Player::Player(std::string playerName, int startMoney, sf::Color tokenColor)
+        : name(std::move(playerName)),
         money(startMoney),
         currentPositionOnBoard(0),
         isInJail(false),
         turnsInJail(0),
-        isBankrupt(false)
+        isBankrupt(false),
+        getOutOfJailFreeCardsCount(0)
             {
                 this->token.setRadius(15.f);
                 this->token.setFillColor(tokenColor);
@@ -23,6 +27,10 @@ int Player::getMoney() const {
 
 int Player::getCurrentPosition() const {
     return this->currentPositionOnBoard;
+}
+
+int Player::getGetOutOfJailFreeCardsCount() const {
+    return getOutOfJailFreeCardsCount;
 }
 
 bool Player::getIsInJail() const {
@@ -51,7 +59,6 @@ void Player::addMoney(const int amount) {
     }
 }
 
-// Віднімає вказану кількість грошей з балансу гравця.
 bool Player::subtractMoney(const int amount) {
     if (amount < 0) return true;
     if (this->money >= amount) {
@@ -73,6 +80,20 @@ bool Player::ownsAllStreetsInGroup(Street::StreetColorGroup groupToCheck, int to
     return count == totalStreetsInGroup;
 }
 
+bool Player::useGetOutOfJailFreeCard() {
+    if (getOutOfJailFreeCardsCount > 0) {
+        getOutOfJailFreeCardsCount--;
+        std::cout << name << " used a Get Out of Jail Free card. Remaining: " << getOutOfJailFreeCardsCount << std::endl;
+        return true;
+    }
+    return false;
+}
+
+void Player::addGetOutOfJailFreeCard() {
+    getOutOfJailFreeCardsCount++;
+    std::cout << name << " now has " << getOutOfJailFreeCardsCount << " Get Out of Jail Free card(s)." << std::endl;
+}
+
 void Player::moveTo(int newPosition, int boardSize) {
     if (newPosition < this->currentPositionOnBoard && !this->isInJail) {
         // Можливо, тут має бути логіка нарахування грошей за проходження "GO"
@@ -91,6 +112,14 @@ void Player::sendToJail(int jailPosition) {
     this->isInJail = true;
     this->turnsInJail = 0;
     this->currentPositionOnBoard = jailPosition;
+}
+
+void Player::leaveJail() {
+    if (isInJail) {
+        isInJail = false;
+        turnsInJail = 0;
+        std::cout << name << " is now out of jail." << std::endl;
+    }
 }
 
 // Спроба вийти з в'язниці (Треба буде дописати)

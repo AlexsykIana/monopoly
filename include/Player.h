@@ -11,6 +11,7 @@
 #include "Street.h"
 
 class Street;
+class Game;
 
 class Player {
 private:
@@ -22,9 +23,10 @@ private:
     int turnsInJail;                    // Кількість ходів, проведених у в'язниці
     std::vector<Street*> ownedStreets;  // Список вулиць, якими володіє гравець (вказівники на об'єкти Street)
     bool isBankrupt;
+    int getOutOfJailFreeCardsCount;
 
 public:
-    Player(const std::string& playerName, int startMoney, sf::Color tokenColor);
+    Player(std::string playerName, int startMoney, sf::Color tokenColor);
 
     [[nodiscard]] const std::string& getName() const;
     [[nodiscard]] int getMoney() const;
@@ -34,7 +36,11 @@ public:
     [[nodiscard]] bool getIsBankrupt() const;
     [[nodiscard]] const std::vector<Street*>& getOwnedStreets() const;
     [[nodiscard]] bool ownsAllStreetsInGroup(Street::StreetColorGroup group, int totalStreetsInGroup) const;
+    [[nodiscard]] int getGetOutOfJailFreeCardsCount() const;
 
+    void addGetOutOfJailFreeCard();
+
+    bool useGetOutOfJailFreeCard();
 
     void setName(const std::string& newName);
 
@@ -50,15 +56,14 @@ public:
 
     void attemptToLeaveJail();
 
+    void leaveJail();
+
     void incrementTurnsInJail();
 
-    // Додавання купленої вулиці
     void addOwnedStreet(Street* street);
 
-    // Видалення вулиці зі списку володінь (наприклад, при продажу)
     void removeOwnedStreet(const Street* streetToRemove);
 
-    // Оголошення банкрутства
     void declareBankruptcy();
 
     void drawToken(sf::RenderWindow& window) const;

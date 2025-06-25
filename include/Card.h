@@ -35,14 +35,14 @@ class Card {
     bool isGetOutOfJailCard;
 
     public:
-    Card(const std::string& desc, ActionType type, int value1 = 0, int value2 = 0, bool isGetOutOfJailCard = false);
+    Card(std::string desc, ActionType type, int value1 = 0, int value2 = 0, bool isGetOutOfJailCard = false);
 
     [[nodiscard]] const std::string& getDescription() const;
     [[nodiscard]] ActionType getActionType() const;
     [[nodiscard]] int getValue1() const;
     [[nodiscard]] int getValue2() const;
-    [[noreturn]] bool isGetOutOfJailFree() const;
+    [[nodiscard]] bool isGetOutOfJailFree() const;
 
-    void applyEffect(Player& player, GameBoard& board, std::vector<Player*>& allPlayers);
+    void applyEffect(Player& player, GameBoard& board, std::vector<Player*>& allPlayers) const;
 };
 #endif //CARD_H

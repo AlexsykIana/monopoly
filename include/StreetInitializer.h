@@ -7,7 +7,6 @@
 
 #include "Street.h"
 #include <vector>
-#include <SFML/Graphics.hpp>
 
 std::vector<Street> initializeAllProperties();
 
