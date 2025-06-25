@@ -55,12 +55,12 @@ Game::Game()
 }
 
 bool Game::loadResources() {
-    if (!boardTexture.loadFromFile("C:/projects/monopoly/assets/monopoly-2.jpg")) {
+    if (!boardTexture.loadFromFile("assets/monopoly-2.jpg")) {
         std::cout << "Failed to load background texture!" << std::endl;
         return false;
     }
 
-    if (!mainFont.loadFromFile("C:/projects/monopoly/assets/fonts/Roboto_Condensed-Regular.ttf")) {
+    if (!mainFont.loadFromFile("assets/fonts/Roboto_Condensed-Regular.ttf")) {
         std::cout << "Failed to load font!" << std::endl;
         return false;
     }
