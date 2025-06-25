@@ -20,6 +20,7 @@ set(SFML_BUILD_AUDIO OFF)
 set(SFML_BUILD_NETWORK OFF)
 set(SFML_BUILD_EXAMPLES OFF)
 set(SFML_BUILD_DOC OFF)
+set(BUILD_SHARED_LIBS OFF)
 
 # 3. Declare the SFML dependency from its official GitHub repository.
 #    We are targeting version 2.6.1, which is the latest stable release.
