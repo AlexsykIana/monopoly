@@ -21,7 +21,7 @@ class Game {
 public:
     // UI
     static constexpr float UI_AREA_WIDTH = 300.f;
-    static constexpr float CHAT_AREA_HEIGHT  = 300.f;
+    static constexpr float CHAT_AREA_HEIGHT = 300.f;
     static constexpr float PLAYER_STATUS_AREA_HEIGHT = 150.f;
     static constexpr float PADDING = 10.f;
 
@@ -42,9 +42,9 @@ private:
     sf::Text confirmationText;
     std::unique_ptr<Button> confirmButton;
     std::unique_ptr<Button> cancelButton;
-    Street* selectedStreet;
+    Street *selectedStreet;
 
-    sf::RectangleShape propertyOwnerHighlight;  // прямокутник для підсвічування куплених вулиць гравців
+    sf::RectangleShape propertyOwnerHighlight; // прямокутник для підсвічування куплених вулиць гравців
 
     sf::RenderWindow window;
     sf::Font mainFont;
@@ -62,12 +62,14 @@ private:
 
     // Player panel
     sf::RectangleShape playerStatusBackground;
+
     struct PlayerStatusUI {
         sf::CircleShape turnIndicator;
         sf::Text nameText;
         sf::Text moneyText;
         sf::Text jailCardText;
     };
+
     std::vector<PlayerStatusUI> playerStatusUIs;
 
     //game log
@@ -83,8 +85,8 @@ private:
 
     // для скролу чату
     sf::View chatView;
-    unsigned int maxLogMessages;  // максимальна к-ть повідомлень у логу
-    unsigned int logCharacterSize;  // розмір символів тексту
+    unsigned int maxLogMessages; // максимальна к-ть повідомлень у логу
+    unsigned int logCharacterSize; // розмір символів тексту
     float chatScrollOffset;
     float totalLogTextHeight;
 
@@ -104,7 +106,7 @@ private:
 
     bool loadResources();  // для заантаження шрифтів
     void initializePlayers(int numberOfPlayers);  // для створення гравців
-    void initializeGameUIAndButtons();  // UI
+    void initializeGameUIAndButtons(); // UI
     void initializePlayerStatusUI(); // Player Panel
     void updateTokenPositionsOnTile(int tileIndex);
     void processEvents();  // оборка подій
@@ -115,21 +117,33 @@ private:
     void addPlayerActionToLog(const Player& player, const std::string& actionMessagePart);
     void addSystemMessageToLog(const std::string& message);
     void handleChatScroll(float delta);
+
     void handleButtonAction(GameButtonType actionType); // обробка дій кнопок
     // Button
     void enterMortgageSelectionMode();
+
     void enterUnmortgageSelectionMode();
+
     void enterBuildSelectionMode();
+
     void enterSellHouseSelectionMode();
+
     void handlePropertySelectionForMortgage(sf::Vector2i mousePosition);
+
     void handlePropertySelectionForUnmortgage(sf::Vector2i mousePosition);
+
     void handlePropertySelectionForBuilding(sf::Vector2i mousePosition);
+
     void handlePropertySelectionForSellHouse(sf::Vector2i mousePosition);
 
-    void showConfirmationDialog(const std::string& message, GameButtonType confirmAction, GameButtonType cancelAction);
+    void showConfirmationDialog(const std::string &message, GameButtonType confirmAction, GameButtonType cancelAction);
+
     void hideConfirmationDialog();
+
     void renderSelectionHighlights();
+
     void renderConfirmationDialog();
+
     void renderOwnedProperties(); // метод для підсвучання куплених вулиць
 
 public:
