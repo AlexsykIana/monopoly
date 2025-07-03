@@ -1,22 +1,20 @@
 #include "Street.h"
 #include "Player.h"
 
-Street::Street(std::string name,int price, StreetColorGroup streetGroup, sf::Vector2f positionOnBoard)
-    :   nameStreet(std::move(name)),
-        purchasePrice(price),
-        currentPenalty(0),
-        housesBuilt(0),
-        group(streetGroup),
-        posOnBoard(positionOnBoard),
-        isMortgaged(false),
-        isOwned(false),
-        owner(nullptr)
-
-{
+Street::Street(std::string name, int price, StreetColorGroup streetGroup, sf::Vector2f positionOnBoard)
+    : nameStreet(std::move(name)),
+      purchasePrice(price),
+      currentPenalty(0),
+      housesBuilt(0),
+      group(streetGroup),
+      posOnBoard(positionOnBoard),
+      isMortgaged(false),
+      isOwned(false),
+      owner(nullptr) {
     updatePenalty();
 }
 
-const std::string& Street::getName() const {
+const std::string &Street::getName() const {
     return this->nameStreet;
 }
 
@@ -32,7 +30,7 @@ bool Street::getIsOwned() const {
     return this->isOwned;
 }
 
-Player* Street::getOwner() const {
+Player *Street::getOwner() const {
     return this->owner;
 }
 
@@ -58,19 +56,33 @@ void Street::clearOwner() {
     updatePenalty();
 }
 
+int Street::getHouseCost() const {
+    switch (group) {
+        case StreetColorGroup::BROWN:
+        case StreetColorGroup::LIGHT_BLUE: return 50;
+        case StreetColorGroup::PINK:
+        case StreetColorGroup::ORANGE: return 100;
+        case StreetColorGroup::RED:
+        case StreetColorGroup::YELLOW: return 150;
+        case StreetColorGroup::GREEN:
+        case StreetColorGroup::BLUE: return 200;
+        default: return 0;
+    }
+}
+
 int Street::getTotalStreetsInGroup(StreetColorGroup group) {
     switch (group) {
-        case StreetColorGroup::BROWN:       return STREETS_IN_BROWN_GROUP;
-        case StreetColorGroup::LIGHT_BLUE:  return STREETS_IN_LIGHT_BLUE_GROUP;
-        case StreetColorGroup::PINK:        return STREETS_IN_PINK_GROUP;
-        case StreetColorGroup::ORANGE:      return STREETS_IN_ORANGE_GROUP;
-        case StreetColorGroup::RED:         return STREETS_IN_RED_GROUP;
-        case StreetColorGroup::YELLOW:      return STREETS_IN_YELLOW_GROUP;
-        case StreetColorGroup::GREEN:       return STREETS_IN_GREEN_GROUP;
-        case StreetColorGroup::BLUE:        return STREETS_IN_BLUE_GROUP;
-        case StreetColorGroup::TRAIN:       return STREETS_IN_TRAIN_GROUP;
-        case StreetColorGroup::COMMUNAL:    return STREETS_IN_COMMUNAL_GROUP;
-        default:                            return 0;
+        case StreetColorGroup::BROWN: return STREETS_IN_BROWN_GROUP;
+        case StreetColorGroup::LIGHT_BLUE: return STREETS_IN_LIGHT_BLUE_GROUP;
+        case StreetColorGroup::PINK: return STREETS_IN_PINK_GROUP;
+        case StreetColorGroup::ORANGE: return STREETS_IN_ORANGE_GROUP;
+        case StreetColorGroup::RED: return STREETS_IN_RED_GROUP;
+        case StreetColorGroup::YELLOW: return STREETS_IN_YELLOW_GROUP;
+        case StreetColorGroup::GREEN: return STREETS_IN_GREEN_GROUP;
+        case StreetColorGroup::BLUE: return STREETS_IN_BLUE_GROUP;
+        case StreetColorGroup::TRAIN: return STREETS_IN_TRAIN_GROUP;
+        case StreetColorGroup::COMMUNAL: return STREETS_IN_COMMUNAL_GROUP;
+        default: return 0;
     }
 }
 
@@ -89,13 +101,13 @@ void Street::updatePenalty() {
             currentPenalty = baseRent * 4;
         } else if (housesBuilt == 4) {
             currentPenalty = baseRent * 5;
-        }  else if (housesBuilt == 5) {
+        } else if (housesBuilt == 5) {
             currentPenalty = baseRent * 10;
         }
     }
 }
 
-bool Street::buyStreet(Player* newOwner) {
+bool Street::buyStreet(Player *newOwner) {
     if (!isOwned && newOwner && newOwner->subtractMoney(purchasePrice)) {
         this->owner = newOwner;
         this->isOwned = true;
@@ -118,7 +130,15 @@ int Street::sellStreetToBank() {
     return 0;
 }
 
-bool Street::buildHouse(Player* builder) {
+int Street::sellHouse () {
+    if (housesBuilt == 0) { return 0; }
+    int sellPrice = getHouseCost() / 2;
+    housesBuilt--;
+    updatePenalty();
+    return sellPrice;
+}
+
+bool Street::buildHouse(Player *builder) {
     if (isOwned && owner == builder && !isMortgaged && housesBuilt < 5 /*max houses*/) {
         int costOfHouse = 0;
         switch (this->group) {
@@ -162,7 +182,7 @@ bool Street::buildHouse(Player* builder) {
     return false;
 }
 
-bool Street::mortgageStreet(const Player* mortgagor) {
+bool Street::mortgageStreet(const Player *mortgagor) {
     if (isOwned && owner == mortgagor && !isMortgaged && housesBuilt == 0) {
         isMortgaged = true;
         updatePenalty();
@@ -173,7 +193,7 @@ bool Street::mortgageStreet(const Player* mortgagor) {
     return false;
 }
 
-bool Street::redeemMortgage(Player* redeemer) {
+bool Street::redeemMortgage(Player *redeemer) {
     if (isOwned && owner == redeemer && isMortgaged) {
         int moneyForRedeemMortgageMortgage = (purchasePrice / 2);
         moneyForRedeemMortgageMortgage = static_cast<int>(moneyForRedeemMortgageMortgage * 1.10);

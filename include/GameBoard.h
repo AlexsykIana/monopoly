@@ -8,7 +8,7 @@
 #include "Deck.h"
 
 class Player;
-class GameBoard;
+class Street;
 
 class GameBoard {
 private:
@@ -35,12 +35,13 @@ public:
     [[nodiscard]] static int getTotalSquares();
     [[nodiscard]] int getJailPosition() const;
     [[nodiscard]] int getGoPosition() const;
+    [[nodiscard]] int findTileIndexByStreet(const Street* streetToFind) const;
 
-    void playerLandedOnSquare(Player& player, int squareIndex, std::vector<Player*>& allPlayers);
-    void drawAndApplyChanceCard(Player& currentPlayer, std::vector<Player*>& allPlayers);
-    void drawAndApplyCommunityChestCard(Player& currentPlayer, std::vector<Player*>& allPlayers);
+    BoardTile::LandedAction playerLandedOnSquare(Player& player, int squareIndex, std::vector<Player*>& allPlayers);
+    BoardTile::LandedAction drawAndApplyChanceCard(Player& currentPlayer, std::vector<Player*>& allPlayers);
+    BoardTile::LandedAction drawAndApplyCommunityChestCard(Player& currentPlayer, std::vector<Player*>& allPlayers);
 
-    int movePlayer(Player &player, int steps, bool &passedGo);
+    static int movePlayer(Player &player, int steps, bool &passedGo);
     void movePlayerToSquare(Player& player, int targetSquareIndex, bool collectGoSalaryIfPassed);
 };
 

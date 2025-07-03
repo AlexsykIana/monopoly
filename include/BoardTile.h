@@ -15,6 +15,10 @@ class GameBoard;
 
 class BoardTile {
 public:
+    enum class LandedAction {
+        NOTHING,
+        TURN_ENDS_IMMEDIATELY
+    };
     enum class TileType {
         PROPERTY,
         GO,
@@ -24,7 +28,7 @@ public:
         LUXURY_TAX,
         JAIL_OR_JUST_VISITING,
         GO_TO_JAIL,
-        FREE_PARKING,
+        FREE_PARKING
     };
 
 protected:
@@ -44,7 +48,7 @@ public:
     [[nodiscard]] sf::Vector2f getVisualPosition() const;
 
 
-    virtual void onPlayerLanded(Player& player, GameBoard& board, std::vector<Player*>& allPlayers);
+    virtual LandedAction onPlayerLanded(Player& player, GameBoard& board, std::vector<Player*>& allPlayers);
 
 };
 #endif //BOARDTILE_H

@@ -11,6 +11,6 @@ class FreeParkingTile : public BoardTile {
     public:
     explicit FreeParkingTile(sf::Vector2f visualPos);
 
-    void onPlayerLanded(Player &player, GameBoard &board, std::vector<Player *> &allPlayers) override;
+    LandedAction onPlayerLanded(Player &player, GameBoard &board, std::vector<Player *> &allPlayers) override;
 };
 #endif //FREEPARKINGTILE_H

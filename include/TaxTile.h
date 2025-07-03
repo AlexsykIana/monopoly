@@ -17,7 +17,7 @@ private:
 public:
     TaxTile(const std::string& tileName, BoardTile::TileType tileType, sf::Vector2f visualPos, int amount);
 
-    void onPlayerLanded(Player &player, GameBoard &board, std::vector<Player *> &allPlayers) override;
+    LandedAction onPlayerLanded(Player &player, GameBoard &board, std::vector<Player *> &allPlayers) override;
 
     [[nodiscard]] int getTaxAmount() const;
 };

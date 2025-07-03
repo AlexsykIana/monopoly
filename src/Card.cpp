@@ -10,9 +10,10 @@ Card::Card(std::string desc, ActionType type, int val1, int val2, bool isGetOutO
       action(type),
       value1(val1),
       value2(val2),
-      isGetOutOfJailCard(isGetOutOfJail) {}
+      isGetOutOfJailCard(isGetOutOfJail) {
+}
 
-const std::string& Card::getDescription() const {
+const std::string &Card::getDescription() const {
     return description;
 }
 
@@ -32,15 +33,17 @@ bool Card::isGetOutOfJailFree() const {
     return isGetOutOfJailCard;
 }
 
-void Card::applyEffect(Player& player, GameBoard& board, std::vector<Player*>& allPlayers) const {
+BoardTile::LandedAction Card::applyEffect(Player &player, GameBoard &board, std::vector<Player *> &allPlayers) const {
     std::cout << player.getName() << " drew card: " << description << std::endl;
+    BoardTile::LandedAction finalResult = BoardTile::LandedAction::NOTHING;
 
     switch (action) {
         case ActionType::PAY_MONEY_TO_BANK: {
             std::cout << player.getName() << " pays " << value1 << " to the bank." << std::endl;
             player.subtractMoney(value1);
             if (!player.subtractMoney(value1)) {
-                std::cout << player.getName() << " cannot afford to pay $" << value1 << ". Needs to manage assets or declare bankruptcy." << std::endl;
+                std::cout << player.getName() << " cannot afford to pay $" << value1 <<
+                        ". Needs to manage assets or declare bankruptcy." << std::endl;
                 // TODO: Логіка неможливості оплати
             }
             break;
@@ -54,17 +57,22 @@ void Card::applyEffect(Player& player, GameBoard& board, std::vector<Player*>& a
 
         case ActionType::MOVE_TO_POSITION: {
             int targetPosition = value1;
-            const BoardTile* targetTileInfo = board.getTileAt(targetPosition);
+            const BoardTile *targetTileInfo = board.getTileAt(targetPosition);
             std::string targetName = targetTileInfo ? targetTileInfo->getName() : "Unknown Square";
 
             std::cout << player.getName() << " moves to " << targetName
-                      << " (position " << targetPosition << ")." << std::endl;
+                    << " (position " << targetPosition << ")." << std::endl;
 
             bool collectGo = true;
 
             board.movePlayerToSquare(player, targetPosition, collectGo);
 
-            board.playerLandedOnSquare(player, player.getCurrentPosition(), allPlayers);
+            BoardTile::LandedAction newActionResult = board.playerLandedOnSquare(player, player.getCurrentPosition(), allPlayers);
+
+            if (newActionResult == BoardTile::LandedAction::TURN_ENDS_IMMEDIATELY) {
+                finalResult = newActionResult;
+            }
+
             break;
         }
 
@@ -73,19 +81,24 @@ void Card::applyEffect(Player& player, GameBoard& board, std::vector<Player*>& a
             std::cout << player.getName() << " moves forward " << steps << " spaces." << std::endl;
             bool passedGo = false;
             int newPos = board.movePlayer(player, steps, passedGo);
-            if(passedGo) {
+            if (passedGo) {
                 player.addMoney(200);
             }
-            board.playerLandedOnSquare(player, newPos, allPlayers);
+            BoardTile::LandedAction newActionResult = board.playerLandedOnSquare(player, newPos, allPlayers);
+            if (newActionResult == BoardTile::LandedAction::TURN_ENDS_IMMEDIATELY) {
+                finalResult = newActionResult;
+            }
             break;
         }
 
         case ActionType::GO_TO_JAIL: {
             std::cout << player.getName() << " goes to jail." << std::endl;
             player.sendToJail(board.getJailPosition());
-            if (const BoardTile* jailTile = board.getTileAt(board.getJailPosition())) {
+            if (const BoardTile *jailTile = board.getTileAt(board.getJailPosition())) {
                 player.setTokenVisualPosition(jailTile->getVisualPosition());
             }
+            finalResult = BoardTile::LandedAction::TURN_ENDS_IMMEDIATELY;
+            std::cout << "DEBUG Card: Returning " << (int)finalResult << std::endl;
             break;
         }
 
@@ -99,7 +112,7 @@ void Card::applyEffect(Player& player, GameBoard& board, std::vector<Player*>& a
             int costPerHouse = value1;
             int costPerHotel = value2;
             int totalRepairCost = 0;
-            for (const Street* street : player.getOwnedStreets()) {
+            for (const Street *street: player.getOwnedStreets()) {
                 if (street) {
                     int houses = street->getHousesBuilt();
                     if (houses > 0 && houses < 5) {
@@ -111,7 +124,8 @@ void Card::applyEffect(Player& player, GameBoard& board, std::vector<Player*>& a
             }
             std::cout << player.getName() << " pays $" << totalRepairCost << " for general repairs." << std::endl;
             if (!player.subtractMoney(totalRepairCost)) {
-                std::cout << player.getName() << " cannot afford repairs. Needs to manage assets or declare bankruptcy." << std::endl;
+                std::cout << player.getName() << " cannot afford repairs. Needs to manage assets or declare bankruptcy."
+                        << std::endl;
                 // TODO: Логіка неможливості оплати
             }
             break;
@@ -120,13 +134,14 @@ void Card::applyEffect(Player& player, GameBoard& board, std::vector<Player*>& a
         case ActionType::PAY_EACH_PLAYER: {
             int amountPerPlayer = value1;
             std::cout << player.getName() << " pays $" << amountPerPlayer << " to each other player." << std::endl;
-            for (Player* otherPlayer : allPlayers) {
+            for (Player *otherPlayer: allPlayers) {
                 if (otherPlayer != &player && !otherPlayer->getIsBankrupt()) {
                     if (player.subtractMoney(amountPerPlayer)) {
                         otherPlayer->addMoney(amountPerPlayer);
                         std::cout << "Paid $" << amountPerPlayer << " to " << otherPlayer->getName() << std::endl;
                     } else {
-                        std::cout << player.getName() << " ran out of money paying " << otherPlayer->getName() << ". Stopping payments." << std::endl;
+                        std::cout << player.getName() << " ran out of money paying " << otherPlayer->getName() <<
+                                ". Stopping payments." << std::endl;
                         // TODO: Логіка неможливості оплати (банкрутство)
                         break;
                     }
@@ -137,18 +152,21 @@ void Card::applyEffect(Player& player, GameBoard& board, std::vector<Player*>& a
 
         case ActionType::RECEIVE_FROM_EACH_PLAYER: {
             int amountFromPlayer = value1;
-            std::cout << player.getName() << " receives $" << amountFromPlayer << " from each other player." << std::endl;
-            for (Player* otherPlayer : allPlayers) {
+            std::cout << player.getName() << " receives $" << amountFromPlayer << " from each other player." <<
+                    std::endl;
+            for (Player *otherPlayer: allPlayers) {
                 if (otherPlayer != &player && !otherPlayer->getIsBankrupt()) {
                     if (otherPlayer->subtractMoney(amountFromPlayer)) {
                         player.addMoney(amountFromPlayer);
-                        std::cout << "Received $" << amountFromPlayer << " from " << otherPlayer->getName() << std::endl;
+                        std::cout << "Received $" << amountFromPlayer << " from " << otherPlayer->getName() <<
+                                std::endl;
                     } else {
                         int amountCanPay = otherPlayer->getMoney();
-                        if(amountCanPay > 0) {
+                        if (amountCanPay > 0) {
                             otherPlayer->subtractMoney(amountCanPay);
                             player.addMoney(amountCanPay);
-                            std::cout << otherPlayer->getName() << " could only pay $" << amountCanPay << "." << std::endl;
+                            std::cout << otherPlayer->getName() << " could only pay $" << amountCanPay << "." <<
+                                    std::endl;
                         } else {
                             std::cout << otherPlayer->getName() << " has no money to pay." << std::endl;
                         }
@@ -162,4 +180,5 @@ void Card::applyEffect(Player& player, GameBoard& board, std::vector<Player*>& a
             std::cout << "Unknown card action type for: " << description << std::endl;
             break;
     }
+    return finalResult;
 }

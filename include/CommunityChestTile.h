@@ -14,6 +14,6 @@ class CommunityChestTile : public BoardTile {
     public:
     explicit  CommunityChestTile(sf::Vector2f visualPos);
 
-    void onPlayerLanded(Player &player, GameBoard &board, std::vector<Player *> &allPlayers) override;
+    LandedAction onPlayerLanded(Player &player, GameBoard &board, std::vector<Player *> &allPlayers) override;
 };
 #endif //COMMUNITYCHESTTILE_H

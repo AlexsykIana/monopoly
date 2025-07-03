@@ -46,19 +46,22 @@ private:
 public:
     Street(std::string name, int price, StreetColorGroup streetGroup, sf::Vector2f positionOnBoard);
 
-    [[nodiscard]] const std::string& getName() const;
+
     [[nodiscard]] int getPurchasePrice() const;
     [[nodiscard]] int getCurrentPenalty() const;
-    [[nodiscard]] bool getIsOwned() const;
-    [[nodiscard]] Player* getOwner() const;
-    [[nodiscard]] bool getIsMortgaged() const;
     [[nodiscard]] int getHousesBuilt() const;
+    [[nodiscard]] int getHouseCost() const;
+    [[nodiscard]] bool getIsOwned() const;
+    [[nodiscard]] bool getIsMortgaged() const;
+    [[nodiscard]] Player* getOwner() const;
+    [[nodiscard]] const std::string& getName() const;
     [[nodiscard]] StreetColorGroup getGroup() const;
     [[nodiscard]] sf::Vector2f getPosOnBoard() const;
 
     void clearOwner();
-    bool buyStreet(Player* newOwner);
     int sellStreetToBank();
+    int sellHouse();
+    bool buyStreet(Player* newOwner);
     bool buildHouse(Player* builder);
     bool mortgageStreet(const Player* mortgagor);
     bool redeemMortgage(Player* redeemer);

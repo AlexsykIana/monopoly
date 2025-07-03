@@ -45,7 +45,9 @@ file(GLOB SOURCES "src/*.cpp")
 file(GLOB HEADERS "include/*.h")
 
 # Create executable
-add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS}
+        include/ButtonManager.h
+        src/ButtonManager.cpp)
 
 # Add include directories.
 # Since SFML is now part of our build, its include directories are

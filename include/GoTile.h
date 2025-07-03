@@ -10,6 +10,6 @@ class GoTile : public BoardTile {
     public:
     explicit GoTile(sf::Vector2f position);
 
-    void onPlayerLanded(Player &player, GameBoard &board, std::vector<Player *> &allPlayers) override;
+    LandedAction onPlayerLanded(Player &player, GameBoard &board, std::vector<Player *> &allPlayers) override;
 };
 #endif //GOTILE_H

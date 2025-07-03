@@ -14,7 +14,7 @@ class GoToJailTile: public BoardTile {
     public:
     explicit GoToJailTile(sf::Vector2f visualPos);
 
-    void onPlayerLanded(Player &player, GameBoard &board, std::vector<Player *> &allPlayers) override;
+    LandedAction onPlayerLanded(Player& player, GameBoard& board, std::vector<Player*>& allPlayers) override;
 };
 
 #endif //GOTOJAILTILE_H

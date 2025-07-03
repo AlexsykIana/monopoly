@@ -6,10 +6,11 @@
 BoardTile::BoardTile(std::string tileName, TileType tileType, sf::Vector2f visualPos)
     : name(std::move(tileName)),
       type(tileType),
-      visualPosition(visualPos) {}
+      visualPosition(visualPos) {
+}
 
 
-const std::string& BoardTile::getName() const {
+const std::string &BoardTile::getName() const {
     return name;
 }
 
@@ -22,7 +23,8 @@ sf::Vector2f BoardTile::getVisualPosition() const {
 }
 
 
-void BoardTile::onPlayerLanded(Player& player, GameBoard& board, std::vector<Player*>& allPlayers) {
+BoardTile::LandedAction BoardTile::onPlayerLanded(Player &player, GameBoard &board, std::vector<Player *> &allPlayers) {
     std::cout << "Player " << player.getName() << " landed on " << this->name
-              << " (Type: " << static_cast<int>(this->type) << ")" << std::endl;
+            << " (Type: " << static_cast<int>(this->type) << ")" << std::endl;
+    return LandedAction::NOTHING;
 }

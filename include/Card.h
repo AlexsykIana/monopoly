@@ -7,6 +7,7 @@
 
 #include <string>
 #include <vector>
+#include "BoardTile.h"
 
 class Player;
 class GameBoard;
@@ -43,6 +44,6 @@ class Card {
     [[nodiscard]] int getValue2() const;
     [[nodiscard]] bool isGetOutOfJailFree() const;
 
-    void applyEffect(Player& player, GameBoard& board, std::vector<Player*>& allPlayers) const;
+    BoardTile::LandedAction applyEffect(Player& player, GameBoard& board, std::vector<Player*>& allPlayers) const;
 };
 #endif //CARD_H

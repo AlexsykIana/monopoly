@@ -14,7 +14,7 @@ class ChanceTile : public BoardTile {
 public:
     explicit  ChanceTile(sf::Vector2f visualPos);
 
-    void onPlayerLanded(Player& player, GameBoard& board, std::vector<Player*>& allPlayers) override;
+    LandedAction onPlayerLanded(Player& player, GameBoard& board, std::vector<Player*>& allPlayers) override;
 };
 
 #endif //CHANCETILE_H

@@ -8,9 +8,10 @@
 #include <iostream>
 
 JailOrJustVisitingTile::JailOrJustVisitingTile(sf::Vector2f visualPos)
-    : BoardTile("Jail / Just Visiting", BoardTile::TileType::JAIL_OR_JUST_VISITING, visualPos) {}
+    : BoardTile("Jail / Just Visiting", BoardTile::TileType::JAIL_OR_JUST_VISITING, visualPos) {
+}
 
-void JailOrJustVisitingTile::onPlayerLanded(Player &player, GameBoard &board, std::vector<Player *> &allPlayers) {
+BoardTile::LandedAction JailOrJustVisitingTile::onPlayerLanded(Player &player, GameBoard &board, std::vector<Player *> &allPlayers) {
     BoardTile::onPlayerLanded(player, board, allPlayers);
 
     if (player.getIsInJail()) {
@@ -18,5 +19,6 @@ void JailOrJustVisitingTile::onPlayerLanded(Player &player, GameBoard &board, st
     } else {
         std::cout << "Player " << player.getName() << " is just visiting Jail." << std::endl;
     }
-}
 
+    return LandedAction::NOTHING;
+}

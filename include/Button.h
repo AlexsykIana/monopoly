@@ -12,12 +12,20 @@ class Button {
 private:
     sf::RectangleShape button;  // Об'єкт, що представляє видимий прямокутник кнопки
     sf::Text text;             // Об'єкт для відображення тексту на кнопці
+    bool isActive;
 
 public:
     Button(const std::string& t, sf::Vector2f size, int charSize, const sf::Font& fontRef, sf::Color bgColor, sf::Color textColor);
 
+
+    [[nodiscard]] sf::FloatRect getGlobalBounds() const;
+
     // Метод для отримання поточного кольору фону кнопки
     sf::Color getBackColor() const;
+
+    bool getIsActive() const;
+
+    void setActive(bool active);
 
     // Метод для встановлення шрифту тексту на кнопці
     void setFont(const sf::Font& fontRef);
@@ -36,6 +44,7 @@ public:
 
     // Метод для перевірки, чи знаходиться курсор миші над кнопкою
     bool isMouseOver(const sf::RenderWindow &window) const;
+
 };
 
 #endif //BUTTON_H

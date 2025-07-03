@@ -8,6 +8,7 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <vector>
+#include <set>
 #include "Street.h"
 
 class Street;
@@ -29,14 +30,17 @@ public:
     Player(std::string playerName, int startMoney, sf::Color tokenColor);
 
     [[nodiscard]] const std::string& getName() const;
+    [[nodiscard]] const std::vector<Street*>& getOwnedStreets() const;
+    [[nodiscard]] const sf::CircleShape& getToken() const;
     [[nodiscard]] int getMoney() const;
     [[nodiscard]] int getCurrentPosition() const;
-    [[nodiscard]] bool getIsInJail() const;
-    [[nodiscard]] const sf::CircleShape& getToken() const;
-    [[nodiscard]] bool getIsBankrupt() const;
-    [[nodiscard]] const std::vector<Street*>& getOwnedStreets() const;
-    [[nodiscard]] bool ownsAllStreetsInGroup(Street::StreetColorGroup group, int totalStreetsInGroup) const;
     [[nodiscard]] int getGetOutOfJailFreeCardsCount() const;
+    [[nodiscard]] int getTurnsInJail() const;
+    [[nodiscard]] bool getIsInJail() const;
+    [[nodiscard]] bool getIsBankrupt() const;
+    [[nodiscard]] bool ownsAllStreetsInGroup(Street::StreetColorGroup group, int totalStreetsInGroup) const;
+    [[nodiscard]] bool canBuildOnStreet(const Street* street, const std::set<Street::StreetColorGroup>& builtGroups) const;
+    [[nodiscard]] bool canSellHouseOnStreet(const Street* street) const;
 
     void addGetOutOfJailFreeCard();
 

@@ -5,12 +5,15 @@
 
 
 ChanceTile::ChanceTile(sf::Vector2f visualPos)
-    : BoardTile("Chance", BoardTile::TileType::CHANCE, visualPos){}
+    : BoardTile("Chance", BoardTile::TileType::CHANCE, visualPos) {
+}
 
-void ChanceTile::onPlayerLanded(Player& player, GameBoard& board, std::vector<Player*>& allPlayers) {
+BoardTile::LandedAction ChanceTile::onPlayerLanded(Player &player, GameBoard &board, std::vector<Player *> &allPlayers) {
     BoardTile::onPlayerLanded(player, board, allPlayers);
 
     std::cout << "Player " << player.getName() << " landed on Chance and draws a card..." << std::endl;
 
-    board.drawAndApplyChanceCard(player, allPlayers);
+    LandedAction result = board.drawAndApplyChanceCard(player, allPlayers);
+    std::cout << "DEBUG ChanceTile: Returning " << (int)result << std::endl;
+    return result;
 }

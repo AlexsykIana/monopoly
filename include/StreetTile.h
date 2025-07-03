@@ -18,7 +18,7 @@ private:
 public:
     explicit StreetTile(const Street& initialPropertyData);
 
-    void onPlayerLanded(Player& player, GameBoard& board, std::vector<Player*>& allPlayers) override;
+    LandedAction onPlayerLanded(Player& player, GameBoard& board, std::vector<Player*>& allPlayers) override;
 
     [[nodiscard]] Street& getPropertyData();
     [[nodiscard]] const Street& getPropertyData() const;
